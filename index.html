@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lou's Creations</title>
+  <meta name="description" content="Lou’s Creations — Lichtenberg wood burning and resin art. A mobile-first gallery showcasing handcrafted pieces from Rhode Island." />
+
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container header-row">
+      <div class="brand">
+        <span class="brand__mark" aria-hidden="true">⚡</span>
+        <div class="brand__text">
+          <div class="brand__name">Lou’s Creations</div>
+          <div class="brand__tag">Lichtenberg Wood Burning • Rhode Island</div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="#gallery">Gallery</a>
+        <a href="#about">About</a>
+        <a href="#contact" class="btn btn--sm">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <h1>Lou’s Creations</h1>
+          <p class="lede">
+            Handcrafted Lichtenberg “lightning” burns with resin—made to feel like museum pieces,
+            built to look incredible on mobile.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn" href="#gallery">View the Gallery</a>
+            <a class="btn btn--ghost" href="#contact">Ask About a Piece</a>
+          </div>
+
+          <div class="hero-badges" aria-label="Highlights">
+            <span class="badge">⚓ Rhode Island</span>
+            <span class="badge">🪵 Handcrafted</span>
+            <span class="badge">⚡ Lichtenberg</span>
+          </div>
+        </div>
+
+        <div class="hero-art" aria-label="Featured artwork preview">
+          <div class="frame">
+            <!-- Swap this to any favorite “hero assets” image you export -->
+            <img
+                src="assets/images/hero-assets/hero-banner/hero-banner-master.png"
+                alt="Featured Lichtenberg wood piece preview"
+                onerror="this.closest('.frame').classList.add('frame--fallback')"
+            />
+            <div class="frame__fallback">
+              <div class="fallback-title">Add a hero image</div>
+              <div class="fallback-sub">assets/images/hero-assets/hero-banner/hero-banner-master.png</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Gallery</h2>
+            <p class="muted">Tap any piece to view it full-screen and ask Lou about it.</p>
+          </div>
+
+          <div class="controls">
+            <input id="searchInput" class="input" type="search" placeholder="Search titles…" autocomplete="off" />
+            <select id="filterSelect" class="select" aria-label="Filter by type">
+              <option value="all">All</option>
+              <option value="panel">Panels</option>
+              <option value="rack">Racks</option>
+              <option value="frame">Frames</option>
+              <option value="heart">Hearts</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="galleryGrid" class="grid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section section--soft">
+      <div class="container about">
+        <div class="about-card">
+          <h2>About Lou</h2>
+          <p>
+            Lou’s Creations showcases handmade Lichtenberg wood-burning art and resin work.
+            This site is a portfolio—Lou isn’t selling online yet, but you can send a message
+            if you’re interested in a similar custom piece.
+          </p>
+
+          <ul class="about-list">
+            <li><strong>Style:</strong> Fractal “lightning” burns</li>
+            <li><strong>Location:</strong> Rhode Island</li>
+            <li><strong>Shop buddy:</strong> Lucky the Boxer 🐾</li>
+          </ul>
+        </div>
+
+        <div class="about-card">
+          <h3>How the “lightning” happens</h3>
+          <p class="muted">
+            Lichtenberg patterns are created by electricity traveling through the grain,
+            forming branching fractals. Resin can be used to emphasize the paths and add color.
+          </p>
+
+          <div class="callout">
+            <div class="callout__icon" aria-hidden="true">⚡</div>
+            <div>
+              <div class="callout__title">Museum-style presentation</div>
+              <div class="callout__body">Dark backgrounds + clean cutouts make the patterns glow.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>Contact</h2>
+            <p class="muted">Send a message to Lou. If you opened a piece, we’ll include its title automatically.</p>
+          </div>
+        </div>
+
+        <form id="contactForm" class="form card" method="POST" action="https://formspree.io/f/YOUR_FORM_ID">
+          <div class="form-row">
+            <label class="field">
+              <span>Name</span>
+              <input class="input" name="name" required />
+            </label>
+
+            <label class="field">
+              <span>Email</span>
+              <input class="input" type="email" name="email" required />
+            </label>
+          </div>
+
+          <label class="field">
+            <span>Piece (auto-filled if selected)</span>
+            <input id="pieceField" class="input" name="piece" placeholder="(optional)" />
+          </label>
+
+          <label class="field">
+            <span>Message</span>
+            <textarea class="textarea" name="message" rows="5" placeholder="Tell Lou what you’re interested in…" required></textarea>
+          </label>
+
+          <div class="form-actions">
+            <button class="btn" type="submit">Send Message</button>
+            <p class="muted small">Tip: replace <code>YOUR_FORM_ID</code> with your real Formspree endpoint.</p>
+          </div>
+
+          <div id="formStatus" class="status" hidden></div>
+        </form>
+      </div>
+    </section>
+  </main>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div class="muted small">© <span id="year"></span> Lou’s Creations</div>
+      <a class="muted small" href="privacy.html">Privacy</a>
+    </div>
+  </footer>
+
+  <script src="assets/scripts/main.js"></script>
+</body>
+</html>

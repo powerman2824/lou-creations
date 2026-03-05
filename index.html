@@ -57,13 +57,13 @@
           <div class="frame">
             <!-- Swap this to any favorite “hero assets” image you export -->
             <img
-              src="assets/images/hero-assets/hero.png"
-              alt="Featured Lichtenberg wood piece preview"
-              onerror="this.closest('.frame').classList.add('frame--fallback')"
+                src="assets/images/hero-assets/hero-banner/hero-banner-master.png"
+                alt="Featured Lichtenberg wood piece preview"
+                onerror="this.closest('.frame').classList.add('frame--fallback')"
             />
             <div class="frame__fallback">
               <div class="fallback-title">Add a hero image</div>
-              <div class="fallback-sub">assets/images/hero-assets/hero.png</div>
+              <div class="fallback-sub">assets/images/hero-assets/hero-banner/hero-banner-master.png</div>
             </div>
           </div>
         </div>
@@ -174,29 +174,6 @@
       </div>
     </section>
   </main>
-
-  <!-- MODAL / LIGHTBOX -->
-  <div id="modal" class="modal" hidden>
-    <div class="modal__backdrop" data-close="true"></div>
-
-    <div class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <button class="icon-btn modal__close" type="button" aria-label="Close" data-close="true">✕</button>
-
-      <div class="modal__content">
-        <div class="modal__media">
-          <img id="modalImg" alt="" />
-        </div>
-
-        <div class="modal__meta">
-          <h3 id="modalTitle"></h3>
-          <div class="modal__actions">
-            <a id="downloadLink" class="btn btn--ghost" href="#" download>Download PNG</a>
-            <button id="askBtn" class="btn" type="button">Ask Lou about this</button>
-          </div>
-          <p class="muted small">Tip: this is a portfolio showcase — message Lou if you want something similar.</p>
-        </div>
-      </div>
-    </div>
   </div>
 
   <footer class="site-footer">

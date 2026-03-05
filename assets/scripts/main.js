@@ -1,7 +1,15 @@
+/**
+ * Lou's Creations — main.js (no modal)
+ * Folder-per-piece layout:
+ *   assets/images/<slug>/<slug>-master.png
+ *   assets/images/<slug>/<slug>-thumbnail.png
+ *   assets/images/<slug>/<slug>.webp
+ */
+
 console.log("main.js loaded ✅");
 
 const PIECES = [
-  { title: "Atlantic Lightning", slug: "atlantic-lightning", type: "panel" },
+  { title: "Atlantic Lightning", slug: "atlantic-lighting", type: "panel" },
   { title: "Ballistic Lightning Rack", slug: "ballistic-lightning-rack", type: "rack" },
   { title: "Crimson Heartstorm Frame", slug: "crimson-heartstorm-frame", type: "frame" },
   { title: "Crimson Thunder Key Rack", slug: "crimson-thunder-key-rack", type: "rack" },
@@ -14,32 +22,24 @@ const PIECES = [
   { title: "Twin Current Panel", slug: "twin-current-panel", type: "panel" },
 ];
 
-// Build file paths from your flat assets/images layout
-function pathsFor(slug) {
-  return {
-    img: `assets/images/${slug}-master.png`,
-    thumbPng: `assets/images/${slug}-thumbnail.png`,
-    thumbWebp: `assets/images/${slug}.webp`,
-  };
-}
-
 const $ = (sel) => document.querySelector(sel);
 
 const galleryGrid = $("#galleryGrid");
 const searchInput = $("#searchInput");
 const filterSelect = $("#filterSelect");
+const yearEl = $("#year");
 
-const modal = $("#modal");
-const modalImg = $("#modalImg");
-const modalTitle = $("#modalTitle");
-const downloadLink = $("#downloadLink");
-const askBtn = $("#askBtn");
-const pieceField = $("#pieceField");
+function pathsFor(slug) {
+  // folder-per-piece
+  const base = `assets/images/${slug}/${slug}`;
+  return {
+    master: `${base}-master.png`,
+    thumbPng: `${base}-thumbnail.png`,
+    thumbWebp: `${base}.webp`,
+  };
+}
 
-const form = $("#contactForm");
-const statusEl = $("#formStatus");
-
-function typeLabel(type) {
+function prettyType(type) {
   switch (type) {
     case "panel": return "Panel";
     case "rack": return "Rack";
@@ -49,31 +49,37 @@ function typeLabel(type) {
   }
 }
 
-function pieceCard(piece) {
+function createSmartImage(piece) {
+  const p = pathsFor(piece.slug);
+
+  const img = document.createElement("img");
+  img.loading = "lazy";
+  img.alt = piece.title;
+  img.src = p.thumbWebp;
+
+  img.onerror = () => {
+    // webp failed -> try thumbnail png
+    img.onerror = () => {
+      // thumbnail failed -> try master
+      img.onerror = null;
+      img.src = p.master;
+    };
+    img.src = p.thumbPng;
+  };
+
+  return img;
+}
+
+function buildCard(piece) {
+  const p = pathsFor(piece.slug);
+
   const card = document.createElement("article");
   card.className = "card piece";
   card.tabIndex = 0;
 
   const imgWrap = document.createElement("div");
   imgWrap.className = "piece__img";
-
-  const img = document.createElement("img");
-  img.loading = "lazy";
-  img.alt = piece.title;
-
-  const p = pathsFor(piece.slug);
-  // Prefer webp, then png thumb, then master
-  img.src = p.thumbWebp;
-  img.onerror = () => {
-    img.onerror = null;
-    img.src = p.thumbPng;
-    img.onerror = () => {
-      img.onerror = null;
-      img.src = p.img;
-    };
-  };
-
-  imgWrap.appendChild(img);
+  imgWrap.appendChild(createSmartImage(piece));
 
   const meta = document.createElement("div");
   meta.className = "piece__meta";
@@ -84,19 +90,41 @@ function pieceCard(piece) {
 
   const chip = document.createElement("div");
   chip.className = "piece__chip";
-  chip.textContent = typeLabel(piece.type);
+  chip.textContent = prettyType(piece.type);
+
+  const actions = document.createElement("div");
+  actions.style.marginTop = "10px";
+  actions.style.display = "flex";
+  actions.style.gap = "10px";
+  actions.style.flexWrap = "wrap";
+
+  const openBtn = document.createElement("a");
+  openBtn.className = "btn btn--ghost btn--sm";
+  openBtn.href = p.master;
+  openBtn.target = "_blank";
+  openBtn.rel = "noopener";
+  openBtn.textContent = "Open";
+
+  actions.appendChild(openBtn);
 
   meta.appendChild(title);
   meta.appendChild(chip);
+  meta.appendChild(actions);
 
   card.appendChild(imgWrap);
   card.appendChild(meta);
 
-  card.addEventListener("click", () => openModal(piece));
+  const openMaster = () => window.open(p.master, "_blank", "noopener");
+
+  card.addEventListener("click", (e) => {
+    if (e.target.closest("a")) return; // let button behave normally
+    openMaster();
+  });
+
   card.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      openModal(piece);
+      openMaster();
     }
   });
 
@@ -104,7 +132,9 @@ function pieceCard(piece) {
 }
 
 function renderGallery(list) {
+  if (!galleryGrid) return;
   galleryGrid.innerHTML = "";
+
   if (!list.length) {
     const empty = document.createElement("div");
     empty.className = "card";
@@ -113,69 +143,38 @@ function renderGallery(list) {
     galleryGrid.appendChild(empty);
     return;
   }
-  list.forEach(p => galleryGrid.appendChild(pieceCard(p)));
+
+  list.forEach((piece) => galleryGrid.appendChild(buildCard(piece)));
 }
 
-function getFiltered() {
-  const q = (searchInput.value || "").trim().toLowerCase();
-  const type = filterSelect.value;
+function getFilteredList() {
+  const q = (searchInput?.value || "").trim().toLowerCase();
+  const type = filterSelect?.value || "all";
 
-  return PIECES.filter(p => {
-    const matchesText = !q || p.title.toLowerCase().includes(q) || p.slug.toLowerCase().includes(q);
+  return PIECES.filter((p) => {
+    const matchesText =
+      !q ||
+      p.title.toLowerCase().includes(q) ||
+      p.slug.toLowerCase().includes(q);
+
     const matchesType = type === "all" || p.type === type;
     return matchesText && matchesType;
   });
 }
 
-function wireFilters() {
-  searchInput?.addEventListener("input", () => renderGallery(getFiltered()));
-  filterSelect?.addEventListener("change", () => renderGallery(getFiltered()));
+function wireControls() {
+  searchInput?.addEventListener("input", () => renderGallery(getFilteredList()));
+  filterSelect?.addEventListener("change", () => renderGallery(getFilteredList()));
 }
 
-function wireForm() {
-  if (!form) return;
-
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    if (statusEl) {
-      statusEl.hidden = true;
-      statusEl.textContent = "";
-    }
-
-    try {
-      const resp = await fetch(form.action, {
-        method: "POST",
-        body: new FormData(form),
-        headers: { "Accept": "application/json" }
-      });
-
-      if (statusEl) {
-        statusEl.hidden = false;
-        statusEl.textContent = resp.ok
-          ? "✅ Message sent! Lou will get back to you soon."
-          : "❌ Something went wrong. Please try again.";
-      }
-
-      if (resp.ok) form.reset();
-    } catch (err) {
-      if (statusEl) {
-        statusEl.hidden = false;
-        statusEl.textContent = "❌ Network error. Please try again.";
-      }
-    }
-  });
+function setYear() {
+  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 }
 
 function init() {
-  const year = new Date().getFullYear();
-  const y = $("#year");
-  if (y) y.textContent = String(year);
-
+  setYear();
+  wireControls();
   renderGallery(PIECES);
-  wireFilters();
-  wireModal();
-  wireForm();
 }
 
 init();

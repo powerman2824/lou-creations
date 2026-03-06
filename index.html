@@ -42,18 +42,25 @@
 
       <div class="hero-inner container">
         <div class="hero__art reveal">
-          <img
-            src="assets/images/hero-assets/hero-banner/hero-banner-master.png"
-            class="hero-banner-art"
-            alt="Lou's Creations handcrafted wood art badge"
-            loading="eager"
-          />
+          <div class="hero-banner-wrap">
+            <span class="hero-banner-glow hero-banner-glow--one" aria-hidden="true"></span>
+            <span class="hero-banner-glow hero-banner-glow--two" aria-hidden="true"></span>
+
+            <img
+              src="assets/images/hero-assets/hero-banner/hero-banner-master.png"
+              class="hero-banner-art"
+              alt="Lou's Creations handcrafted wood art badge"
+              loading="eager"
+            />
+          </div>
         </div>
 
         <div class="hero-copy reveal">
           <div class="hero__eyebrow">⚡ Handcrafted in Rhode Island</div>
 
-          <h1 class="hero__title hero__title--electric">Lou’s Creations</h1>
+          <h1 class="hero__title hero__title--electric" data-text="Lou’s Creations">
+            Lou’s Creations
+          </h1>
 
           <p class="hero__lead">
             Handcrafted Lichtenberg “lightning” burns with resin—made to feel like
@@ -75,7 +82,6 @@
 
       <div class="hero-fade" aria-hidden="true"></div>
     </section>
-
     
     <!-- GALLERY -->
     <section id="gallery" class="section">

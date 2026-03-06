@@ -131,7 +131,7 @@ img{ max-width:100%; display:block; }
 
 /* Sky base */
 .layer-sky{
-  background: url("../backgrounds/beach-sky.jpg") center/cover no-repeat;
+  background: url("../images/backgrounds/beach-sky.jpg") center/cover no-repeat;
   filter: saturate(1.05) contrast(1.05);
 }
 
@@ -143,7 +143,7 @@ img{ max-width:100%; display:block; }
 }
 
 .layer-clouds--back{
-  background-image: url("../backgrounds/clouds.png");
+  background-image: url("../images/backgrounds/clouds.png");
   background-size: auto 45%;
   background-position: 0 18%;
   opacity: 0.35;
@@ -151,7 +151,7 @@ img{ max-width:100%; display:block; }
 }
 
 .layer-clouds--front{
-  background-image: url("../backgrounds/clouds-2.png");
+  background-image: url("../images/backgrounds/clouds-2.png");
   background-size: auto 55%;
   background-position: 0 12%;
   opacity: 0.55;
@@ -160,13 +160,13 @@ img{ max-width:100%; display:block; }
 
 /* Optional horizon layer */
 .layer-horizon{
-  background: url("../backgrounds/beach-horizon.png") center bottom/cover no-repeat;
+  background: url("../images/backgrounds/beach-horizon.png") center bottom/cover no-repeat;
   opacity: 0.85;
 }
 
 /* Waves layer (moves horizontally, sits lower) */
 .layer-waves{
-  background: url("../backgrounds/waves.png") left bottom/auto 40% repeat-x;
+  background: url("../images/backgrounds/waves.png") left bottom/auto 40% repeat-x;
   opacity: 0.75;
   animation: wavesMove 12s linear infinite;
 }

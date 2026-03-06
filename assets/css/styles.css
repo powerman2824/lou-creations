@@ -164,11 +164,43 @@ img{ max-width:100%; display:block; }
   opacity: 0.85;
 }
 
-/* Waves layer (moves horizontally, sits lower) */
 .layer-waves{
-  background: url("../images/backgrounds/waves.png") left bottom/auto 40% repeat-x;
-  opacity: 0.75;
-  animation: wavesMove 12s linear infinite;
+  background-image:
+    url("../images/backgrounds/waves.png"),
+    url("../images/backgrounds/waves.png");
+
+  background-repeat: repeat-x, repeat-x;
+
+  background-position:
+    0 bottom,
+    100% bottom,
+    center bottom;
+
+  background-size:
+    auto 40%,
+    auto 40%;
+
+  animation: wavesMove 18s linear infinite;
+
+  opacity: .85;
+  filter: contrast(1.05) saturate(1.1);
+  transform: translateZ(0);
+  will-change: background-position;
+
+}
+
+@keyframes wavesMove{
+  from{
+    background-position:
+      0 bottom,
+      100% bottom;
+  }
+
+  to{
+    background-position:
+      -200% bottom,
+      -100% bottom;
+  }
 }
 
 /* Dark readability overlay */
@@ -219,10 +251,7 @@ img{ max-width:100%; display:block; }
 }
 
 /* ===== Animations ===== */
-@keyframes wavesMove{
-  from { background-position-x: 0; }
-  to   { background-position-x: -1200px; }
-}
+
 @keyframes cloudsDriftBack{
   from { background-position-x: 0; }
   to   { background-position-x: -1600px; }

@@ -1,5 +1,5 @@
 /**
- * Lou's Creations — main.js (no modal)
+ * Lou's Creations — main.js (parallax + reveal)
  * Folder-per-piece layout:
  *   assets/images/<slug>/<slug>-master.png
  *   assets/images/<slug>/<slug>-thumbnail.png
@@ -29,8 +29,11 @@ const searchInput = $("#searchInput");
 const filterSelect = $("#filterSelect");
 const yearEl = $("#year");
 
+/* =========================
+   Helpers (existing)
+   ========================= */
+
 function pathsFor(slug) {
-  // folder-per-piece
   const base = `assets/images/${slug}/${slug}`;
   return {
     master: `${base}-master.png`,
@@ -74,7 +77,7 @@ function buildCard(piece) {
   const p = pathsFor(piece.slug);
 
   const card = document.createElement("article");
-  card.className = "card piece";
+  card.className = "card piece"; // NOTE: reveal is applied after renderGallery()
   card.tabIndex = 0;
 
   const imgWrap = document.createElement("div");
@@ -117,7 +120,7 @@ function buildCard(piece) {
   const openMaster = () => window.open(p.master, "_blank", "noopener");
 
   card.addEventListener("click", (e) => {
-    if (e.target.closest("a")) return; // let button behave normally
+    if (e.target.closest("a")) return;
     openMaster();
   });
 
@@ -130,6 +133,96 @@ function buildCard(piece) {
 
   return card;
 }
+
+/* =========================
+   Reveal + Parallax (NEW)
+   ========================= */
+
+let revealObserver = null;
+
+function setupRevealObserver() {
+  // If browser doesn't support it, just show everything.
+  if (!("IntersectionObserver" in window)) {
+    document.querySelectorAll(".reveal").forEach((el) => el.classList.add("is-visible"));
+    return;
+  }
+
+  // Disconnect any previous observer (important when re-rendering gallery)
+  if (revealObserver) revealObserver.disconnect();
+
+  revealObserver = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+
+      const el = entry.target;
+      const idx = Number(el.getAttribute("data-index") || "0");
+      el.style.transitionDelay = `${Math.min(idx * 60, 420)}ms`;
+
+      el.classList.add("is-visible");
+      revealObserver.unobserve(el);
+    }
+  }, { threshold: 0.12 });
+}
+
+function observeReveals(scope = document) {
+  if (!revealObserver) setupRevealObserver();
+
+  const els = Array.from(scope.querySelectorAll(".reveal"));
+  els.forEach((el) => revealObserver.observe(el));
+}
+
+function applyGalleryRevealStagger() {
+  // Your cards are .piece (not .gallery-card)
+  const cards = Array.from(document.querySelectorAll(".piece"));
+
+  cards.forEach((card, i) => {
+    card.classList.add("reveal");
+    card.setAttribute("data-index", String(i));
+  });
+
+  // Observe the newly added reveal elements
+  observeReveals(document);
+}
+
+function setupParallax() {
+  const layerDefs = [
+    { sel: ".layer-sky", speed: 0.10 },
+    { sel: ".layer-clouds--back", speed: 0.18 },
+    { sel: ".layer-clouds--front", speed: 0.28 },
+    { sel: ".layer-horizon", speed: 0.38 },
+    { sel: ".layer-waves", speed: 0.52 },
+  ];
+
+  const layers = layerDefs
+    .map((x) => ({ ...x, el: document.querySelector(x.sel) }))
+    .filter((x) => x.el);
+
+  if (!layers.length) return;
+
+  let ticking = false;
+
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+
+    window.requestAnimationFrame(() => {
+      const y = window.scrollY || 0;
+
+      for (const layer of layers) {
+        layer.el.style.transform = `translate3d(0, ${y * layer.speed}px, 0)`;
+      }
+
+      ticking = false;
+    });
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+}
+
+/* =========================
+   Gallery render + controls
+   ========================= */
 
 function renderGallery(list) {
   if (!galleryGrid) return;
@@ -145,6 +238,9 @@ function renderGallery(list) {
   }
 
   list.forEach((piece) => galleryGrid.appendChild(buildCard(piece)));
+
+  // NEW: after rendering, apply reveal + stagger
+  applyGalleryRevealStagger();
 }
 
 function getFilteredList() {
@@ -174,6 +270,15 @@ function setYear() {
 function init() {
   setYear();
   wireControls();
+
+  // NEW: setup reveal observer first, then observe hero elements
+  setupRevealObserver();
+  observeReveals(document); // observes your hero .reveal elements (Louie + hero copy)
+
+  // NEW: parallax scroll
+  setupParallax();
+
+  // Render gallery (this will apply reveal + stagger)
   renderGallery(PIECES);
 }
 

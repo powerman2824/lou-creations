@@ -31,10 +31,26 @@
   </header>
 
   <main id="main">
-    <!-- HERO -->
-    <section class="hero">
-      <div class="container hero-grid">
-        <div class="hero-copy">
+
+    <!-- HERO (Parallax Version) -->
+    <section class="hero-parallax" id="top" aria-label="Hero">
+      <!-- Parallax layers -->
+      <div class="parallax-layer layer-sky" aria-hidden="true"></div>
+      <div class="parallax-layer layer-clouds layer-clouds--back" aria-hidden="true"></div>
+      <div class="parallax-layer layer-clouds layer-clouds--front" aria-hidden="true"></div>
+      <div class="parallax-layer layer-horizon" aria-hidden="true"></div>
+      <div class="parallax-layer layer-waves" aria-hidden="true"></div>
+
+      <!-- Content -->
+      <div class="hero-inner container">
+        <img
+          src="assets/images/hero-assets/hero-about/hero-about-master.png"
+          class="louie louie-left reveal"
+          alt="Louie explaining craftsmanship"
+          loading="eager"
+        />
+
+        <div class="hero-copy reveal">
           <h1>Lou’s Creations</h1>
           <p class="lede">
             Handcrafted Lichtenberg “lightning” burns with resin—made to feel like museum pieces,
@@ -53,21 +69,16 @@
           </div>
         </div>
 
-        <div class="hero-art" aria-label="Featured artwork preview">
-          <div class="frame">
-            <!-- Swap this to any favorite “hero assets” image you export -->
-            <img
-                src="assets/images/hero-assets/hero-banner/hero-banner-master.png"
-                alt="Featured Lichtenberg wood piece preview"
-                onerror="this.closest('.frame').classList.add('frame--fallback')"
-            />
-            <div class="frame__fallback">
-              <div class="fallback-title">Add a hero image</div>
-              <div class="fallback-sub">assets/images/hero-assets/hero-banner/hero-banner-master.png</div>
-            </div>
-          </div>
-        </div>
+        <img
+          src="assets/images/hero-assets/hero-pointing/hero-pointing-master.png"
+          class="louie louie-right reveal"
+          alt="Louie pointing to the gallery"
+          loading="eager"
+        />
       </div>
+
+      <!-- Soft fade into next section -->
+      <div class="hero-fade" aria-hidden="true"></div>
     </section>
 
     <!-- GALLERY -->
@@ -173,8 +184,8 @@
         </form>
       </div>
     </section>
+
   </main>
-  </div>
 
   <footer class="site-footer">
     <div class="container footer-row">
